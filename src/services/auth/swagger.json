@@ -1,0 +1,251 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1",
+        "title": "MYW Project",
+        "description": "My User Project Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000/api",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Site",
+            "description": "API for UDPT"
+        },
+        {
+            "name": "Authentications",
+            "description": "Authentication for UDPT"
+        },
+        {
+            "name": "Users",
+            "description": "Action for users (private access)"
+        },
+        {
+            "name": "Boards",
+            "description": "Action for boards (private access)"
+        }
+    ],
+
+    "schemes": ["HTTP", "HTTPS"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+
+    "securityDefinitions": {
+        "mywToken": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header"
+        }
+    },
+
+    "paths": {
+        "/": {
+            "get": {
+                "tags": ["Site"],
+                "summary": "Get system info.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SystemInfoResponse"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "mywToken": []
+                    }
+                ]
+            }
+        },
+
+        "/auth/sign-up": {
+            "post": {
+                "tags": ["Authentications"],
+                "summary": "Sign up a user.",
+                "responses": {
+                    "200": {
+                        "description": "Sign up successfully!",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "content": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": "string",
+                                        "username": "string",
+                                        "password": "string",
+                                        "email": "string",
+                                        "phone": "string",
+                                        "role": "string",
+                                        "status": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email is already in use!"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Register modal",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Register"
+                        }
+                    }
+                ]
+            }
+        },
+
+        "/auth/login": {
+            "post": {
+                "tags": ["Authentications"],
+                "summary": "Login and get token for MYW client.",
+                "responses": {
+                    "200": {
+                        "description": "Login successfully!",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "content": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Password does not matched!"
+                    },
+                    "404": {
+                        "description": "User not found!"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Login modal",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Login"
+                        }
+                    }
+                ]
+            }
+        },
+
+        "/auth/token": {
+            "get": {
+                "tags": ["Authentications"],
+                "summary": "Refresh token.",
+                "responses": {
+                    "200": {
+                        "description": "Successfully!"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "No token provided!"
+                    }
+                },
+                "security": [
+                    {
+                        "mywToken": []
+                    }
+                ]
+            }
+        },
+
+        "/me": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get user info.",
+                "responses": {
+                    "200": {
+                        "description": "Successfully!"
+                    },
+                    "404": {
+                        "description": "Not found!"
+                    }
+                },
+                "security": [
+                    {
+                        "mywToken": []
+                    }
+                ]
+            }
+        }
+    },
+
+    "definitions": {
+        "SystemInfoResponse": {
+            "type": "object",
+            "properties": {
+                "apiName": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "number"
+                },
+                "statusCode": {
+                    "type": "number"
+                },
+                "result": {
+                    "type": "number"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "object"
+                }
+            }
+        },
+        "Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Register": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
