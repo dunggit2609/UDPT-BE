@@ -30,33 +30,17 @@ module.exports.shopRepo = {
 		return await shopSchema.findOne({ _id: id });
 	},
 
-	async update(id, payload) {
-		let shop = shopSchema.findOne({ _id: id });
-
-		if (!shop) {
-			return;
-		}
-		const curDate = new Date();
-
-		shop = {
+	async update(newShop) {
+		let shop = await shopSchema.findOne({ _id: newShop._id }).lean();
+		console.log(shop);
+		let updateShop = {
 			...shop,
-			...{
-				name: newShop.name,
-				description: newShop.description,
-				business_cert: newShop.business_cert,
-				bank_account: newShop.bank_account,
-				email: newShop.email,
-				phone: newShop.phone,
-				user_id: newShop.user_id,
-				location: newShop.location,
-				review: [],
-				updated_at: curDate
-			}
+			...newShop
 		};
 
-		shop = await shop.save();
+		let result = await shopSchema.findOneAndUpdate({ _id: newShop._id }, updateShop);
 
-		return shop;
+		return result;
 	},
 
 	async findByName(name) {
