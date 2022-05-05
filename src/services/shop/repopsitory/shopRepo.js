@@ -32,13 +32,12 @@ module.exports.shopRepo = {
 
 	async update(newShop) {
 		let shop = await shopSchema.findOne({ _id: newShop._id }).lean();
-		console.log(shop);
 		let updateShop = {
 			...shop,
 			...newShop
 		};
 
-		let result = await shopSchema.findOneAndUpdate({ _id: newShop._id }, updateShop);
+		let result = await shopSchema.findOneAndUpdate({ _id: newShop._id }, updateShop, { new: true });
 
 		return result;
 	},
