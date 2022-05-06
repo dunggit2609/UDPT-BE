@@ -17,7 +17,8 @@ module.exports.shopRepo = {
 				review: [],
 				//created_at: curDate,
 				//updated_at: curDate,
-				_id: new ObjectID()
+				_id: new ObjectID(),
+				isActive: false
 			});
 			shop = shop.save();
 			return shop;
