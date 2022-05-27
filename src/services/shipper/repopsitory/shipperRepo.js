@@ -1,11 +1,11 @@
-const shipperSchema = require('../models/shipper')
+const Shipper = require('../models/shipper')
 const { ObjectID } = require('bson');
 
 module.exports.shipperRepo = {
     async create(newShipper) {
         try {
             const curDate = new Date()
-            let shipper = new shipperSchema({
+            let shipper = new Shipper({
                 full_name: newShipper.full_name,
                 address: newShipper.address,
                 identity: newShipper.identity,
@@ -29,11 +29,11 @@ module.exports.shipperRepo = {
     },
 
     async findById(id) {
-        return await shipperSchema.findOne({ _id: id });
+        return await Shipper.findOne({$or: [{ _id: id }, {user_id: id}]});
     },
 
     async update(id, payload) {
-        let shipper = shipperSchema.findOne({ _id: id })
+        let shipper = Shipper.findOne({ _id: id })
 
         if (!shipper) {
             return;
@@ -57,6 +57,6 @@ module.exports.shipperRepo = {
 
         return shipper;
 
-    }
+    },
 
 }

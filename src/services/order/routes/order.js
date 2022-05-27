@@ -1,5 +1,5 @@
 const express = require('express');
-const UserController = require("../controllers/userController")
+const OrderController = require("../controllers/orderController")
 const router = express.Router();
 const authenticate = require('../../../middlewares/authenticate');
 
@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a Root Dir2');
 });
 
-router.get('/me',[authenticate], UserController.getMyInfo)
+router.post('/get-with-filters',[authenticate], OrderController.getWithFilters)
+router.post('/update-status',[authenticate], OrderController.updateStatus)
 
 module.exports = router;

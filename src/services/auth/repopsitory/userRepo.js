@@ -1,12 +1,12 @@
-const userSchema = require('../models/user')
+const User = require('../models/user')
 const { ObjectID } = require('bson');
 const { USER_STATUS_NEW } = require('../../../constant/user');
-
+require('../../../helpers/string')
 module.exports.userRepo = {
     async create(newUser) {
         try {
             const curDate = new Date()
-            let user = new userSchema({
+            let user = new User({
                 email: newUser.email,
                 phone: newUser.phone,
                 password: newUser.password,
@@ -25,17 +25,18 @@ module.exports.userRepo = {
 
     },
 
-    async findById(id) {
-        return await userSchema.findOne({ _id: id });
+     async findById(id) {
+         console.log("xx", id)
+         return await User.findOne({username: 'shipper'});
     },
 
     async findByEmail(email) {
-        return await userSchema.findOne({ email: email });
+        return await User.findOne({ email: email });
     },
 
     async findByUsername(username) {
         try {
-            return await userSchema.findOne({ username: username });
+            return await User.findOne({ username: username });
 
         } catch (ex) {
             console.log("error-userRepo", ex)
@@ -43,7 +44,7 @@ module.exports.userRepo = {
     },
 
     async update(id, payload) {
-        let user = userSchema.findOne({ _id: id })
+        let user =  await User.findOne({ _id: id })
 
         if (!user) {
             return;

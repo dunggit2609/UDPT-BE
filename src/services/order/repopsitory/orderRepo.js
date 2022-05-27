@@ -1,11 +1,14 @@
-const orderSchema = require('../models/order')
+const Order = require('../models/order')
 const { ObjectID } = require('bson');
+const { getWithFilters } = require('../controllers/orderController');
+const getPagination = require('../../../helpers/pagination');
+const getPagingData = require('../../../helpers/pagingData');
 
 module.exports.orderRepo = {
     async create(newOrder) {
         try {
             const curDate = new Date()
-            let order = new orderSchema({
+            let order = new Order({
                 payment: newOrder.payment,
                 review: [],
                 customer_id: newOrder.customer_id,
@@ -28,11 +31,11 @@ module.exports.orderRepo = {
     },
 
     async findById(id) {
-        return await orderSchema.findOne({ _id: id });
+        return await Order.findOne({ _id: id });
     },
 
     async update(id, payload) {
-        let order = orderSchema.findOne({ _id: id })
+        let order = Order.findOne({ _id: id })
 
         if (!order) {
             return;
@@ -51,18 +54,25 @@ module.exports.orderRepo = {
     },
 
     async updateStatus(id, status) {
-        let order = orderSchema.findOne({ _id: id })
-
+        let order = await Order.findOne({ _id: id })
         if (!order) {
             return;
         }
-        const curDate = new Date()
 
-        order = {...order, status: status}
+        // order = {...order, status: status}
+        order.status = status
+        let result = await Order.updateOne({_id: '625557e4e078c36742dcd85f'}, order);
+        console.log("result", result)
+        return result;
 
-        order = await order.save();
+    },
 
-        return order;
+    async getWithFilters(filters) {
+        const {page, size, shipper_id} = filters
+        const {limit, offset} = getPagination(page, size)
+
+        const orders = await Order.find({shipper_id: shipper_id})
+        return {...getPagingData(orders, limit, offset), page}
 
     }
 

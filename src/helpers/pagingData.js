@@ -1,7 +1,8 @@
-const getPagingData = ( page) => {
-    const currentPage = page ? + page : 1;
-  
-    return currentPage;
+const getPagingData = (data, limit, offset) => {
+
+    const response = data.slice(offset, limit + offset)
+    const totalItems = data.length
+    return {totalItems, response};
   };
 
   module.exports = getPagingData;

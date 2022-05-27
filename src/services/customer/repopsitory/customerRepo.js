@@ -1,11 +1,11 @@
-const customerSchema = require('../models/customer')
+const Customer = require('../models/customer')
 const { ObjectID } = require('bson');
 
 module.exports.customerRepo = {
     async create(newCustomer) {
         try {
             const curDate = new Date()
-            let customer = new customerSchema({
+            let customer = new Customer({
                 full_name: newCustomer.full_name,
                 address: newCustomer.address,
                 identity: newCustomer.identity,
@@ -27,11 +27,11 @@ module.exports.customerRepo = {
     },
 
     async findById(id) {
-        return await customerSchema.findOne({ _id: id });
+        return await Customer.findOne({ _id: id });
     },
 
     async update(id, payload) {
-        let customer = customerSchema.findOne({ _id: id })
+        let customer = Customer.findOne({ _id: id })
 
         if (!customer) {
             return;

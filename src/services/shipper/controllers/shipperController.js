@@ -20,3 +20,16 @@ exports.create = [async function (req, res) {
         return apiResponse.ErrorResponse(res, "Cannot create user")
     }
 }]
+
+exports.find = [async function (req, res) {
+    const {id} = req.body
+    try {
+        const shipper = await shipperRepo.findById(id)
+        return apiResponse.successResponseWithData(res, "Success", shipper) 
+    }
+    catch (err) {
+        console.log("err", err)
+        return apiResponse.ErrorResponse(res, "Cannot create user")
+    }
+}]
+

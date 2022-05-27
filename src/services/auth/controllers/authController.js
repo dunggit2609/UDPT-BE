@@ -1,6 +1,5 @@
 const db = require('../db');
 const axios = require("axios");
-const UserModel = db.User;
 const jwt = require('jsonwebtoken')
 const { check, validationResult, sanitize } = require('express-validator/check');
 var bcrypt = require('bcrypt')
@@ -45,7 +44,6 @@ exports.signUp = async function (req, res) {
 		}
 
 		const hashData = await hash.hash(password, 10)
-
 		const user = await userRepo.create({ ...newUser, ...{ password: hashData } })
 
 		if (!user) {
@@ -136,16 +134,15 @@ exports.login = [
 				return apiResponse.validationErrorWithData(res, "validation Error", errors.array());
 			}
 			else {
-				UserModel.findOne({
-					where: condition
-				})
+
+				userRepo.findByUsername(requsername)
 					.then(user => {
 						if (user) {
 							bcrypt.compare(req.body.password, user.password, (err, same) => {
 								if (same) {
 									if (!user.isBlocked) {
 										let userData = {
-											user_id: user.user_id,
+											user_id: user._id,
 											role: user.role
 										}
 										const jwtPayload = userData;
@@ -168,6 +165,7 @@ exports.login = [
 					})
 			}
 		} catch (err) {
+			console.log("err", err)
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}]
