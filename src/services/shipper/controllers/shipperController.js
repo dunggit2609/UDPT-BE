@@ -33,3 +33,17 @@ exports.find = [async function (req, res) {
     }
 }]
 
+exports.updateHealth = [async function (req, res) {
+    const token = req.headers['authorization']
+    const { user_id } = jwt.decode(token)
+    const shipper = await shipperRepo.findById(user_id)
+
+    try {
+        let newShipper = await shipperRepo.updateHealthInfo(shipper._id, req.body)
+        return apiResponse.successResponse(res, "Success")
+    }
+    catch (err) {
+        console.log("err", err)
+        return apiResponse.ErrorResponse(res, "Cannot update health")
+    }
+}]

@@ -17,7 +17,8 @@ const shipper = new Schema(
         updated_at: { type: Date },
         register_at: { type: Date },
         working_info: {type: Array},
-        checking_result: {type: Array}
+        checking_result: { type: Array },
+        canReceiveOrder: {type: Boolean}
     },
     { timestamps: true },
 );

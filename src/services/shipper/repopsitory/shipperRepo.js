@@ -16,6 +16,7 @@ module.exports.shipperRepo = {
                 user_id: newShipper.user_id,
                 working_info: [],
                 checking_result: [],
+                canReceiveOrder: true,
                 created_at: curDate,
                 updated_at: curDate,
                 _id: new ObjectID()
@@ -33,7 +34,7 @@ module.exports.shipperRepo = {
     },
 
     async update(id, payload) {
-        let shipper = Shipper.findOne({ _id: id })
+        let shipper = await Shipper.findOne({ _id: id })
 
         if (!shipper) {
             return;
@@ -58,5 +59,19 @@ module.exports.shipperRepo = {
         return shipper;
 
     },
+
+    async updateHealthInfo(id, payload) {
+        let shipper = await Shipper.findOne({ _id: id })
+
+        if (!shipper) {
+            return;
+        }
+
+        shipper.working_info.push(payload)
+
+        let result = await Shipper.updateOne({_id: id}, shipper);
+        return result;
+
+    }
 
 }

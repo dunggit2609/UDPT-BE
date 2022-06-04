@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/create', ShipperController.create)
 router.post('/find', ShipperController.find)
-// router.put('/update',[authenticate], CustomerController.create)
-// router.get('/find',[authenticate], CustomerController.create)
+router.put('/update-health', ShipperController.updateHealth)
+
 
 module.exports = router;

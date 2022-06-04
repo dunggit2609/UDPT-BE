@@ -40,7 +40,6 @@ module.exports.orderRepo = {
         if (!order) {
             return;
         }
-        const curDate = new Date()
 
         order = {
             ...order, ...payload,
@@ -61,8 +60,7 @@ module.exports.orderRepo = {
 
         // order = {...order, status: status}
         order.status = status
-        let result = await Order.updateOne({_id: '625557e4e078c36742dcd85f'}, order);
-        console.log("result", result)
+        let result = await Order.updateOne({_id: id}, order);
         return result;
 
     },
