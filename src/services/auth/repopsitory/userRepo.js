@@ -66,6 +66,11 @@ module.exports.userRepo = {
 
         return user;
 
+    },
+
+    async delete(id) {
+          
+        return await User.deleteOne({_id: id})
     }
 
 }

@@ -53,6 +53,8 @@ exports.signUp = async function (req, res) {
 		let serviceEndpointTemplate = `@endpoint:@port/api/@role/create`
 		serviceEndpointTemplate = serviceEndpointTemplate.replace('@endpoint', process.env.ENDPOINT)
 
+		let createcustomerSuccess, createShipperSuccess, createShopSuccess
+
 		switch (user.role) {
 			case USER_ROLE_CUSTOMER:
 				const newCustomer = {
@@ -67,6 +69,7 @@ exports.signUp = async function (req, res) {
 				}
 				const customerServiceUrl = serviceEndpointTemplate.replace('@port', process.env.CUSTOMER_SERVICE_PORT).replace('@role', user.role)
 				const customer = await axios.post(customerServiceUrl, newCustomer)
+				createcustomerSuccess = customer.data.success
 				break;
 			case USER_ROLE_SHIPPER:
 				const newShipper = {
@@ -81,6 +84,7 @@ exports.signUp = async function (req, res) {
 				}
 				const shipperServiceUrl = serviceEndpointTemplate.replace('@port', process.env.SHIPPER_SERVICE_PORT).replace('@role', user.role)
 				const shipper = await axios.post(shipperServiceUrl, newShipper)
+				createShipperSuccess = shipper.data.success
 				break;
 
 			case USER_ROLE_SHOP:
@@ -96,6 +100,17 @@ exports.signUp = async function (req, res) {
 				}
 				const shopServiceUrl = serviceEndpointTemplate.replace('@port', process.env.SHOP_SERVICE_PORT).replace('@role', user.role)
 				const shop = await axios.post(shopServiceUrl, newShop)
+				createShopSuccess = shop.data.success
+				break;
+			default:
+				break;
+		}
+
+		if (!createShipperSuccess && !createShopSuccess && !createcustomerSuccess) {
+			await userRepo.delete(user._id);
+			return apiResponse.ErrorResponse(res, "Sign up failed")
+
+
 		}
 
 		let userData = {
