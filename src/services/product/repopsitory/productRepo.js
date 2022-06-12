@@ -1,4 +1,5 @@
 const productSchema = require('../models/product');
+const productTypeSchema = require('../models/productType');
 const { ObjectID } = require('bson');
 const { shopRepo } = require('services/shop/repopsitory/shopRepo');
 

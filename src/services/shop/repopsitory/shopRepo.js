@@ -26,9 +26,9 @@ module.exports.shopRepo = {
 			return;
 		}
 	},
-
+	// find by id shop hoac id user
 	async findById(id) {
-		return await shopSchema.findOne({ _id: id });
+		return await shopSchema.findOne({ $or: [ { _id: id }, { user_id: id } ] });
 	},
 
 	async update(newShop) {

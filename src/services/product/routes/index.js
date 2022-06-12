@@ -1,10 +1,8 @@
 const express = require('express');
-var auth = require('./auth');
-var user = require('./users');
+var product = require('./product');
 
 var app = express();
 
-app.use("/auth", auth)
-app.use("/user", user)
+app.use('/product', product);
 
 module.exports = app;

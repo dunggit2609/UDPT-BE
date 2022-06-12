@@ -46,3 +46,17 @@ exports.update = [
 		}
 	}
 ];
+
+//find shop by shopId or userId, return shop information
+exports.find = [
+	async function(req, res) {
+		const { id } = req.body;
+		try {
+			const shop = await shopRepo.findById(id);
+			return apiResponse.successResponseWithData(res, 'Success', shop);
+		} catch (err) {
+			console.log('err', err);
+			return apiResponse.ErrorResponse(res, 'Cannot get shop');
+		}
+	}
+];

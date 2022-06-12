@@ -8,5 +8,12 @@ module.exports.productTypeRepo = {
 		} catch (err) {
 			return;
 		}
+	},
+	async getAllCategories() {
+		return await productTypeSchema.find({});
+	},
+
+	async getProductType(id) {
+		return await productTypeSchema.find({ _id: id });
 	}
 };

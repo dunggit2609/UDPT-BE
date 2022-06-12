@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create', ShopController.create);
+router.post('/find', ShopController.find);
 // router.put('/update',[authenticate], CustomerController.create)
 // router.get('/find',[authenticate], CustomerController.create)
 router.put('/update', ShopController.update);
